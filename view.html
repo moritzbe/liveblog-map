@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>The Liveblog</title>
+      <script type="text/javascript" src="jquery.min.js"></script>
+      <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?libraries=geometry&key=AIzaSyAq5jqy6DxgQBkk4KoTPgqEk2Pcwc0WfwE&sensor=False"></script>
+      <script type="text/javascript" src="view.js"></script>
+      <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+      </style>
+  </head>
+
+  <body> 
+    <h1 id="title"> The Liveblog </h1>
+
+
+    <div id="map-canvas"></div>
+
+
+
+    <script>
+      $(document).ready(function(){
+        google.maps.event.addDomListener(window, 'load', initialize);
+        console.log("yo");
+      });
+    </script>
+
+  </body>
+</html>
