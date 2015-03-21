@@ -1,0 +1,12 @@
+h1 {
+	color: red;
+}
+
+
+html, body, #map-canvas {
+        height: 90%;
+        margin-left: 10px;
+        margin-right: 10px;
+        padding: 0px;
+}
+      
