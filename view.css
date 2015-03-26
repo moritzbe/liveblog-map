@@ -4,9 +4,11 @@ h1 {
 
 
 html, body, #map-canvas {
-        height: 90%;
+	height: 100%;
+	width: 100%;
+     /*   height: 90%;
         margin-left: 10px;
         margin-right: 10px;
-        padding: 0px;
+        padding: 0px;*/
 }
       

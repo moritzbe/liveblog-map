@@ -1,18 +1,16 @@
-
-
-function distance(coords){
-    var distance, finaldistance;
-  if(coords.length >0) {
-    var destination = new google.maps.LatLng(coords[coords.length-1].latitude, coords[coords.length-1].longitude)
-    distance = google.maps.geometry.spherical.computeDistanceBetween(munich, destination)/1000;
-    finaldistance = distance.toFixed(1).toString()+"km"
-    console.log(finaldistance);
-    return finaldistance;
-  }
-    finaldistance ="0km";
-    return finaldistance;
+// function distance(coords){
+//     var distance, finaldistance;
+//   if(coords.length > 0) {
+//     var destination = new google.maps.LatLng(coords[coords.length-1].latitude, coords[coords.length-1].longitude)
+//     distance = google.maps.geometry.spherical.computeDistanceBetween(munich, destination)/1000;
+//     finaldistance = distance.toFixed(1).toString()+"km"
+//     console.log(finaldistance);
+//     return finaldistance;
+//   }
+//     finaldistance ="0km";
+//     return finaldistance;
   
-}
+// }
 
 
 
@@ -23,25 +21,31 @@ $(document).ready(function(){
 
 
   var munich = window.munich = new google.maps.LatLng(48.150618, 11.581317)
-  var url = "http://5.189.130.27:8000/api/journal";
   var teamarray = [];
   var Liveblog = window.Liveblog = function () {
-
   }
 
   Liveblog.prototype.drawMap = function(){
+    // var mapOptions = {
+    //   center: new google.maps.LatLng(49.928474, 11.579697),
+    //   zoom: 4,
+    //   // styles: styleday(style),
+    //   mapTypeId: google.maps.MapTypeId.ROADMAP,
+    //   scrollwheel: false,
+    // };
+
     var mapOptions = {
-      center: new google.maps.LatLng(49.928474, 11.579697),
-      zoom: 4,
-      styles: styleday(style),
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
-      scrollwheel: false,
+        zoom: 6,
+        center: munich,
+        styles: styleday(style),
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        scrollwheel: false,
+      };
+      this.map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
     };
 
-    this.map = new google.maps.Map(document.getElementById("map_canvas"),
-        mapOptions);
-  };
-
+  var url = "http://5.189.130.27:8000/api/journal";
   Liveblog.prototype.getData = function(){
     var self = this;
       $.ajax({
@@ -49,29 +53,29 @@ $(document).ready(function(){
         url: url,
         dataType: "json",
         success: function(data) {
-          data.forEach(function(dataItem) {
-            console.log(data);
-                var team = { 
-                  // teamnumber: dataItem.team.id,
-                  // teamname: dataItem.team.teamname,
-                  // teamcolor: dataItem.team.teamcolor,
-                  // distance: dataItem.positions[dataItem.positions.length-1].distance,
-                  // player1: dataItem.players[0].prename,
-                  // player2: dataItem.players[1].prename,
-                  // messages: dataItem.messages,
-                  // positions: dataItem.positions,
-                };
-                teamarray.push(team);
-          });
+          console.log(data);
+          // data.forEach(function(dataItem) {
+          //       var team = { 
+          //         // teamnumber: dataItem.team.id,
+          //         // teamname: dataItem.team.teamname,
+          //         // teamcolor: dataItem.team.teamcolor,
+          //         // distance: dataItem.positions[dataItem.positions.length-1].distance,
+          //         // player1: dataItem.players[0].prename,
+          //         // player2: dataItem.players[1].prename,
+          //         // messages: dataItem.messages,
+          //         // positions: dataItem.positions,
+          //       };
+                // teamarray.push(team);
+          
           initialize();
         },
         error: function() {
            console.log(error);
         }
       });
-    var teamarray = [];
-    teamarray = [{"id":"", "city": "munich", "longitude":0,"latitude":0,"text":null,"timestamp":null},{"id":"5", "city": "munich", "longitude":0.156479,"latitude":0.156479,"text":"WIR SIND HIER OMG SO COOL!","timestamp":"2015-03-01T13:19:17.000Z"},{"id":"5", "city": "munich", "longitude":0,"latitude":0,"text":null,"timestamp":null},{"id":"5", "city": "munich", "longitude":0.156479,"latitude":0.156479,"text":"WIR SIND HIER OMG SO COOL!","timestamp":"2015-03-01T13:43:08.000Z"}];
-    console.log(teamarray);
+    // var teamarray = [];
+    // teamarray = [{"id":"", "city": "munich", "longitude":0,"latitude":0,"text":null,"timestamp":null},{"id":"5", "city": "munich", "longitude":0.156479,"latitude":0.156479,"text":"WIR SIND HIER OMG SO COOL!","timestamp":"2015-03-01T13:19:17.000Z"},{"id":"5", "city": "munich", "longitude":0,"latitude":0,"text":null,"timestamp":null},{"id":"5", "city": "munich", "longitude":0.156479,"latitude":0.156479,"text":"WIR SIND HIER OMG SO COOL!","timestamp":"2015-03-01T13:43:08.000Z"}];
+    // console.log(teamarray);
 
 
   };
@@ -80,36 +84,37 @@ $(document).ready(function(){
   function initialize() {
 
     var map = liveblogInstance.map;
-    var i;
+    // var i;
     // var start = new google.maps.Marker({
     //   position: munich,
-    //   icon: image,
+    //   // icon: image,
     //   map: map
     // });
+  }
 
-    teamarray.forEach(function (team) {
-      console.log(team);
-      var coords = team.positions;
-      var route = [munich];          
-      //var bounds = new google.maps.LatLngBounds ();
-      distance(coords);
+//     teamarray.forEach(function (team) {
+//       console.log(team);
+//       var coords = team.positions;
+//       var route = [munich];          
+//       //var bounds = new google.maps.LatLngBounds ();
+//       distance(coords);
 
-      for (i = 0; i < coords.length; i++) {
-        route.push(new google.maps.LatLng(coords[i].latitude, coords[i].longitude));
-      }
+//       for (i = 0; i < coords.length; i++) {
+//         route.push(new google.maps.LatLng(coords[i].latitude, coords[i].longitude));
+//       }
 
-      marker(coords, team, map);
+//       marker(coords, team, map);
 
 
-      var flightPath = new google.maps.Polyline({
-        path:route,
-        strokeColor: team.teamcolor,
-        strokeOpacity: 1.0,
-        strokeWeight: 3
-      });  
-      flightPath.setMap(map); 
-    }); 
-};
+//       var flightPath = new google.maps.Polyline({
+//         path:route,
+//         strokeColor: team.teamcolor,
+//         strokeOpacity: 1.0,
+//         strokeWeight: 3
+//       });  
+//       flightPath.setMap(map); 
+//     }); 
+// };
 
   // function marker(coords, team, map) {
   //   var marker;
@@ -142,7 +147,7 @@ $(document).ready(function(){
 
   //     '</div>';
   //   return contentstring;
-  // }
+  
 
 
 //-------------------------------------------------------------------
