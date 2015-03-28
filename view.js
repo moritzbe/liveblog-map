@@ -12,16 +12,43 @@
   
 // }
 
+function getPositions(team){
+  $.ajax({
+        type: "GET",
+        url: "http://5.189.130.27:8000/api/journal?where[id]=35"+"&orderBy=timestamp&orderDirection=ASC",
+        dataType: "json",
+        success: function(data) {
+          team.positions = data.json;
+        },
+        error: function() {
+          console.log(error);
+        }
+  });
+}
+
+function getMembers(team){
+  $.ajax({
+        type: "GET",
+        url: "http://5.189.130.27:8000/api/member?where[team_id]=18&limit=2",
+        dataType: "json",
+        success: function(data) {
+          team.player1 = data.json[0].vorname;
+          team.player2 = data.json[1].vorname;
+        },
+        error: function() {
+          console.log(error);
+        }
+  });
+}
 
 
 //Upon Load
 $(document).ready(function(){
 "use strict";
 
-
-
   var munich = window.munich = new google.maps.LatLng(48.150618, 11.581317)
   var teamarray = [];
+  var url = "http://5.189.130.27:8000/api/";
   var Liveblog = window.Liveblog = function () {
   }
 
@@ -43,42 +70,43 @@ $(document).ready(function(){
       };
       this.map = new google.maps.Map(document.getElementById('map-canvas'),
       mapOptions);
+      this.getData();
     };
 
-  var url = "http://5.189.130.27:8000/api/journal";
   Liveblog.prototype.getData = function(){
     var self = this;
       $.ajax({
         type: "GET",
-        url: url,
+        url: url+"team",
         dataType: "json",
         success: function(data) {
-          console.log(data);
-          // data.forEach(function(dataItem) {
-          //       var team = { 
-          //         // teamnumber: dataItem.team.id,
-          //         // teamname: dataItem.team.teamname,
-          //         // teamcolor: dataItem.team.teamcolor,
-          //         // distance: dataItem.positions[dataItem.positions.length-1].distance,
-          //         // player1: dataItem.players[0].prename,
-          //         // player2: dataItem.players[1].prename,
-          //         // messages: dataItem.messages,
-          //         // positions: dataItem.positions,
-          //       };
-                // teamarray.push(team);
-          
-          initialize();
+          var dataobject = data.json;
+            data.json.forEach(function(dataItem) {
+                  var team = { 
+                    teamnumber: dataItem.id,
+                    teamname: dataItem.name,
+                    positions: "",            
+                    distance: "",
+                    player1: "",
+                    player2: "",
+                    messages: "",
+                  };
+                  getPositions(team);
+                  getMembers(team);
+                  teamarray.push(team);
+                  
+            });
+            console.log(teamarray);
+            initialize();
         },
         error: function() {
            console.log(error);
         }
-      });
     // var teamarray = [];
     // teamarray = [{"id":"", "city": "munich", "longitude":0,"latitude":0,"text":null,"timestamp":null},{"id":"5", "city": "munich", "longitude":0.156479,"latitude":0.156479,"text":"WIR SIND HIER OMG SO COOL!","timestamp":"2015-03-01T13:19:17.000Z"},{"id":"5", "city": "munich", "longitude":0,"latitude":0,"text":null,"timestamp":null},{"id":"5", "city": "munich", "longitude":0.156479,"latitude":0.156479,"text":"WIR SIND HIER OMG SO COOL!","timestamp":"2015-03-01T13:43:08.000Z"}];
     // console.log(teamarray);
-
-
-  };
+      });
+  }
 
 
   function initialize() {
