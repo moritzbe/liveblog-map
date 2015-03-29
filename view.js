@@ -1,24 +1,22 @@
-// function distance(coords){
-//     var distance, finaldistance;
-//   if(coords.length > 0) {
-//     var destination = new google.maps.LatLng(coords[coords.length-1].latitude, coords[coords.length-1].longitude)
-//     distance = google.maps.geometry.spherical.computeDistanceBetween(munich, destination)/1000;
-//     finaldistance = distance.toFixed(1).toString()+"km"
-//     console.log(finaldistance);
-//     return finaldistance;
-//   }
-//     finaldistance ="0km";
-//     return finaldistance;
-  
-// }
+function getDistance(team){
+    var distance;
+  if(team.positions.length > 0) {
+    var destination = new google.maps.LatLng(team.positions[team.positions.length-1].latitude, team.positions[team.positions.length-1].longitude);
+    distance = google.maps.geometry.spherical.computeDistanceBetween(munich, destination)/1000;
+    team.distance = distance.toFixed(1).toString()+"km";
+    console.log(team.distance);
+  }
+    team.distance ="0km";
+}
 
-function getPositions(team){
+function getPositions(team, callback){
   $.ajax({
         type: "GET",
-        url: "http://5.189.130.27:8000/api/journal?where[id]=35"+"&orderBy=timestamp&orderDirection=ASC",
+        url: "http://5.189.130.27:8000/api/journal?where[team_id]=1&orderBy=timestamp&orderDirection=ASC",
         dataType: "json",
         success: function(data) {
           team.positions = data.json;
+          callback(team);
         },
         error: function() {
           console.log(error);
@@ -29,7 +27,7 @@ function getPositions(team){
 function getMembers(team){
   $.ajax({
         type: "GET",
-        url: "http://5.189.130.27:8000/api/member?where[team_id]=18&limit=2",
+        url: "http://5.189.130.27:8000/api/member?where[id]="+team.id+"8&limit=2&orderBy=vorname&orderDirection=ASC",
         dataType: "json",
         success: function(data) {
           team.player1 = data.json[0].vorname;
@@ -53,13 +51,6 @@ $(document).ready(function(){
   }
 
   Liveblog.prototype.drawMap = function(){
-    // var mapOptions = {
-    //   center: new google.maps.LatLng(49.928474, 11.579697),
-    //   zoom: 4,
-    //   // styles: styleday(style),
-    //   mapTypeId: google.maps.MapTypeId.ROADMAP,
-    //   scrollwheel: false,
-    // };
 
     var mapOptions = {
         zoom: 6,
@@ -89,9 +80,8 @@ $(document).ready(function(){
                     distance: "",
                     player1: "",
                     player2: "",
-                    messages: "",
                   };
-                  getPositions(team);
+                  getPositions(team, getDistance);
                   getMembers(team);
                   teamarray.push(team);
                   
@@ -102,9 +92,6 @@ $(document).ready(function(){
         error: function() {
            console.log(error);
         }
-    // var teamarray = [];
-    // teamarray = [{"id":"", "city": "munich", "longitude":0,"latitude":0,"text":null,"timestamp":null},{"id":"5", "city": "munich", "longitude":0.156479,"latitude":0.156479,"text":"WIR SIND HIER OMG SO COOL!","timestamp":"2015-03-01T13:19:17.000Z"},{"id":"5", "city": "munich", "longitude":0,"latitude":0,"text":null,"timestamp":null},{"id":"5", "city": "munich", "longitude":0.156479,"latitude":0.156479,"text":"WIR SIND HIER OMG SO COOL!","timestamp":"2015-03-01T13:43:08.000Z"}];
-    // console.log(teamarray);
       });
   }
 
