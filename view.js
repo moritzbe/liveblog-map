@@ -1,12 +1,14 @@
 function getDistance(team){
     var distance;
-  if(team.positions.length > 0) {
-    var destination = new google.maps.LatLng(team.positions[team.positions.length-1].latitude, team.positions[team.positions.length-1].longitude);
-    distance = google.maps.geometry.spherical.computeDistanceBetween(munich, destination)/1000;
-    team.distance = distance.toFixed(1).toString()+"km";
-    console.log(team.distance);
-  }
-    team.distance ="0km";
+      if(team.positions.length > 0) {
+        var destination = new google.maps.LatLng(team.positions[team.positions.length-1].latitude, team.positions[team.positions.length-1].longitude);
+        distance = google.maps.geometry.spherical.computeDistanceBetween(munich, destination)/1000;
+        console.log(distance);
+        team.distance = distance.toFixed(1).toString()+"km";
+        console.log(team.distance);
+      } else {
+        team.distance ="0km";
+      }
 }
 
 function getPositions(team, callback){
